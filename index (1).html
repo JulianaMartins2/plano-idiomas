@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano de Idiomas · EN · FR · ES</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f4ef;--surface:#fff;--s2:#f2ede6;
+  --ink:#1a1814;--muted:#7a7268;--bd:#e2dbd0;
+  --en:#1a4a2e;--en-bg:#eaf4ee;--en-bd:#a8d4b4;
+  --fr:#1a2e4a;--fr-bg:#eaeef4;--fr-bd:#a8b8d4;
+  --es:#4a1a1a;--es-bg:#f4eaea;--es-bd:#d4a8a8;
+  --gold:#b8852a;--gold-bg:#fdf3e0;
+  --green:#2d6a2d;--green-bg:#eaf4ea;--green-bd:#a8d4a8;
+  --amber:#8a5a00;--amber-bg:#fdf3e0;--amber-bd:#f0c060;
+}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+nav{background:var(--ink);color:#fff;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200}
+.nav-brand{font-size:15px;font-weight:600}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-date{font-size:12px;opacity:.6}
+.sdot{width:8px;height:8px;border-radius:50%;background:#4a4;transition:background .3s}
+.sdot.saving{background:#fa0}.sdot.err{background:#f44}
+.lang-tabs{display:flex;border-bottom:1px solid var(--bd);background:var(--surface);position:sticky;top:52px;z-index:190;overflow-x:auto}
+.ltab{padding:12px 18px;font-size:13px;font-weight:600;cursor:pointer;border:none;border-bottom:3px solid transparent;color:var(--muted);background:none;white-space:nowrap;transition:all .15s}
+.ltab.active[data-l=en]{color:var(--en);border-bottom-color:var(--en)}
+.ltab.active[data-l=fr]{color:var(--fr);border-bottom-color:var(--fr)}
+.ltab.active[data-l=es]{color:var(--es);border-bottom-color:var(--es)}
+.ltab.active[data-l=all]{color:var(--ink);border-bottom-color:var(--ink)}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+.overview{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.ovc{border-radius:10px;padding:12px 14px;border:1px solid var(--bd)}
+.ovc[data-l=en]{background:var(--en-bg);border-color:var(--en-bd)}
+.ovc[data-l=fr]{background:var(--fr-bg);border-color:var(--fr-bd)}
+.ovc[data-l=es]{background:var(--es-bg);border-color:var(--es-bd)}
+.ov-lang{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-bottom:3px}
+.ov-pct{font-size:22px;font-weight:700}
+.ov-track{height:5px;border-radius:3px;background:rgba(0,0,0,.1);margin:5px 0 3px;overflow:hidden}
+.ov-fill{height:100%;border-radius:3px;transition:width .5s}
+.ovc[data-l=en] .ov-fill{background:var(--en)}
+.ovc[data-l=fr] .ov-fill{background:var(--fr)}
+.ovc[data-l=es] .ov-fill{background:var(--es)}
+.ov-sub{font-size:11px;opacity:.6}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:10px 8px;text-align:center}
+.stat-n{font-size:20px;font-weight:700}
+.stat-l{font-size:10px;color:var(--muted);margin-top:2px}
+.week-nav{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.wbtn{width:32px;height:32px;border-radius:8px;border:1px solid var(--bd);background:var(--surface);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.wbtn:hover:not(:disabled){background:var(--s2)}.wbtn:disabled{opacity:.3;cursor:not-allowed}
+.w-info{flex:1}.w-title{font-size:14px;font-weight:600}.w-range{font-size:11px;color:var(--muted)}
+.dgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
+.dbtn{border:1px solid var(--bd);border-radius:8px;padding:7px 4px;text-align:center;cursor:pointer;background:var(--surface);transition:all .15s}
+.dbtn:hover{border-color:#aaa}.dbtn.sel{border:2px solid var(--ink)}.dbtn.future{opacity:.45}
+.dbtn.fall{background:var(--green-bg);border-color:var(--green-bd)}
+.dbtn.fen{background:var(--en-bg);border-color:var(--en-bd)}
+.dbtn.ffr{background:var(--fr-bg);border-color:var(--fr-bd)}
+.dbtn.fes{background:var(--es-bg);border-color:var(--es-bd)}
+.dbtn.part{background:var(--amber-bg);border-color:var(--amber-bd)}
+.d-name{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.d-num{font-size:13px;font-weight:600}
+.d-dots{display:flex;justify-content:center;gap:2px;margin-top:3px}
+.d-dot{width:5px;height:5px;border-radius:50%}
+.day-hdr{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.day-title{font-size:16px;font-weight:700}.day-meta{font-size:12px;color:var(--muted)}
+.done-banner{background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;padding:10px 14px;text-align:center;font-size:13px;font-weight:600;color:var(--green);margin-bottom:10px;display:none}
+.sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.sbadge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.sb-en{background:var(--en-bg);color:var(--en)}.sb-fr{background:var(--fr-bg);color:var(--fr)}.sb-es{background:var(--es-bg);color:var(--es)}
+.tasks{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.task{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none}
+.task:hover:not(.fut){border-color:#bbb}.task.done{background:var(--green-bg);border-color:var(--green-bd)}.task.fut{opacity:.5;cursor:default}
+.chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:13px;color:transparent;transition:all .15s}
+.task.done .chk{background:var(--green);border-color:var(--green);color:#fff}
+.tb{flex:1;min-width:0}
+.t-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.t-label{font-size:13px;font-weight:600}
+.t-time{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.t-detail{font-size:12px;color:var(--muted);line-height:1.5}
+.t-specific{font-size:12px;margin-top:5px;padding:6px 9px;background:var(--s2);border-radius:6px;border-left:2px solid var(--bd);color:var(--ink);line-height:1.5}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.t-anki{background:#ede8ff;color:#3d2e8a}.t-gram{background:#e0ecff;color:#1a3a7a}
+.t-in{background:#fff3e0;color:#7a4a00}.t-out{background:#ffe8e0;color:#7a2a00}
+.t-voc{background:#e8f4e8;color:#1a4a1a}.t-fr{background:#eaeef8;color:#1a2e5a}.t-es{background:#f8eaea;color:#5a1a1a}
+.lsession{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:6px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none}
+.lsession:hover:not(.fut){border-color:#bbb}.lsession.done{background:var(--green-bg);border-color:var(--green-bd)}.lsession.fut{opacity:.5;cursor:default}
+.ls-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.ls-title{font-size:13px;font-weight:600}.ls-gram{font-size:11px;color:var(--muted);flex:1}
+.ls-blocks{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.ls-block{font-size:12px;padding:6px 10px;background:var(--s2);border-radius:6px;border-left:2px solid var(--bd);line-height:1.5;color:var(--ink)}
+.ls-block strong{font-weight:600;margin-right:4px}
+.ls-foot{display:flex;align-items:center;gap:8px;font-size:12px;border-top:1px solid var(--bd);padding-top:8px}
+.ls-foot .chk{width:20px;height:20px;flex-shrink:0}
+.lsession.done .chk{background:var(--green);border-color:var(--green);color:#fff}
+.revc{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.rev-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.rev-title{font-size:13px;font-weight:700}
+.rev-cnt{font-size:11px;background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:2px 9px;font-weight:600}
+.rev-items{display:flex;flex-direction:column;gap:5px}
+.ritem{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:var(--s2);border:1px solid var(--bd);font-size:12px;cursor:pointer;transition:all .15s;user-select:none}
+.ritem:hover{border-color:#aaa}.ritem.dr{background:var(--green-bg);border-color:var(--green-bd)}
+.rdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}.rdp{background:#e09020}.rdd{background:#2d6a2d}
+.rt{flex:1}.rn{font-weight:500;margin-bottom:1px}.rw{font-size:11px;color:var(--muted)}
+.rbtn{font-size:11px;padding:3px 9px;border-radius:7px;border:1px solid var(--bd);background:var(--surface);cursor:pointer;color:var(--muted)}
+.ms-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.msi{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--bd);border-radius:10px;background:var(--surface);cursor:pointer;transition:all .15s;user-select:none}
+.msi.done{background:var(--green-bg);border-color:var(--green-bd)}.msi.cur{border-color:var(--gold);background:var(--gold-bg)}.msi.lk{opacity:.45;cursor:default}
+.ms-ico{font-size:18px;flex-shrink:0;width:26px;text-align:center;margin-top:1px}
+.ms-body{flex:1}.ms-name{font-size:13px;font-weight:600;margin-bottom:2px}.ms-desc{font-size:11px;color:var(--muted);line-height:1.4}.ms-date{font-size:10px;color:var(--muted);margin-top:3px}
+.ms-badge{font-size:10px;padding:3px 9px;border-radius:10px;white-space:nowrap;font-weight:600;align-self:flex-start;margin-top:2px}
+.mb-d{background:var(--green-bg);color:var(--green)}.mb-c{background:var(--gold-bg);color:var(--gold)}.mb-l{background:var(--s2);color:var(--muted)}
+footer{text-align:center;padding:32px 16px;font-size:11px;color:var(--muted)}
+footer a{color:var(--muted);cursor:pointer}
+@media(max-width:500px){.overview{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.dgrid{gap:4px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Idiomas &nbsp;·&nbsp; EN · FR · ES</div>
+  <div class="nav-right">
+    <div class="nav-date" id="nav-date"></div>
+    <div class="sdot" id="sdot"></div>
+  </div>
+</nav>
+
+<div class="lang-tabs" id="lang-tabs">
+  <button class="ltab active" data-l="en">🇺🇸 English</button>
+  <button class="ltab" data-l="fr">🇫🇷 Français</button>
+  <button class="ltab" data-l="es">🇪🇸 Español</button>
+  <button class="ltab" data-l="all">📅 Visão Geral</button>
+</div>
+
+<div class="wrap">
+  <div class="overview" id="overview"></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="week-nav">
+    <button class="wbtn" id="pw">←</button>
+    <div class="w-info">
+      <div class="w-title" id="wt">Semana 1</div>
+      <div class="w-range" id="wr"></div>
+    </div>
+    <button class="wbtn" id="nw">→</button>
+  </div>
+
+  <div class="dgrid" id="dgrid"></div>
+
+  <div class="day-hdr">
+    <div>
+      <div class="day-title" id="dtitle">Hoje</div>
+      <div class="day-meta" id="dmeta"></div>
+    </div>
+    <div id="dphase"></div>
+  </div>
+  <div class="done-banner" id="done-banner">🎉 Todos os idiomas concluídos hoje!</div>
+
+  <div id="content"></div>
+
+  <div class="sec">🔁 Revisões espaçadas da semana</div>
+  <div class="revc">
+    <div class="rev-hdr">
+      <div class="rev-title">Obrigatórias esta semana</div>
+      <div class="rev-cnt" id="rcnt"></div>
+    </div>
+    <div class="rev-items" id="ritems"></div>
+  </div>
+
+  <div class="sec">🏁 Marcos da jornada</div>
+  <div class="ms-list" id="mslist"></div>
+
+  <footer>
+    Progresso salvo localmente · <a id="reset-btn">Apagar progresso</a><br>
+    26/mai → 31/dez/2026 · 220 dias · 2h/dia
+  </footer>
+</div>
+
+<script>
+// ═══════════════════════════════
+// CONSTANTES
+// ═══════════════════════════════
+const START=new Date(2026,4,26);
+const TOTAL=220;
+const DPT=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MPT=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+// ── Inglês: gramática semana a semana ──────────────────
+// Cada semana tem: topic (título), focus (contexto), e tarefas específicas por dia da semana
+const EN_GRAM=[
+  {w:[1,2],   top:"Simple Present, Past e Future · Modais básicos",
+   byDow:[
+    "Estude Simple Present no Cambridge Grammar in Use (Unit 1-3). Exercícios da unidade. Crie 5 frases sobre sua rotina.",
+    "Revise Simple Past (Unit 5-7). Escreva 5 frases sobre o que fez ontem. Adicione ao Anki: 3 verbos irregulares novos.",
+    "Estude Simple Future (will / going to — Unit 19-20). Escreva 3 frases com will e 3 com going to sobre seus planos.",
+    "Estude modais: can, must, should (Unit 27-29). Exercícios da unidade. Escreva 4 frases usando cada modal.",
+    "Revise todos os tempos da semana. Escreva um parágrafo de 60 palavras misturando os 4 tempos.",
+    "Corrija erros dos escritos da semana com LanguageTool. Adicione estruturas problemáticas ao Anki.",
+    "Revisão leve: releia os exemplos do Anki. Cambridge Grammar: faça o mini-teste de revisão.",
+  ]},
+  {w:[3,4],   top:"Present & Past Continuous · Comparativos e Superlativos",
+   byDow:[
+    "Estude Present Continuous (Cambridge Unit 3-4). Compare: 'I work' vs 'I am working'. 5 frases de contraste.",
+    "Estude Past Continuous (Cambridge Unit 6). 'was/were + -ing'. Escreva uma mini-história (3 frases) em Past Continuous.",
+    "Estude comparativos: bigger, more interesting (Cambridge Unit 64-65). 5 frases comparando 2 coisas reais.",
+    "Estude superlativos: the biggest, the most (Cambridge Unit 64-65). Escreva 5 frases com superlativos.",
+    "Estude preposições de tempo e lugar: in/on/at, in front of, behind (Cambridge Unit 108-110). 5 frases.",
+    "Escreva um parágrafo de 80 palavras descrevendo uma cena usando Continuous + preposições.",
+    "Revisão: Anki + releia parágrafo da sexta. Corrija com LanguageTool.",
+  ]},
+  {w:[5,6],   top:"Present Perfect (introdução) · Revisão total A2",
+   byDow:[
+    "Estude Present Perfect: have/has + particípio (Cambridge Unit 7-9). 'I have seen / she has done'. 5 frases.",
+    "Contraste Present Perfect vs Simple Past (Cambridge Unit 10). 'I've seen it' vs 'I saw it yesterday'. 5 pares.",
+    "Estude there is/there are + question words (Cambridge Unit 37, 44). Escreva 5 frases de cada.",
+    "Revisão A2 total: releia gramática das semanas 1-4. Faça os testes de revisão do Cambridge Grammar.",
+    "Escreva 150 palavras sobre um tema livre usando todos os tempos aprendidos (Present, Past, Future, Perfect, Continuous).",
+    "Corrija e adicione estruturas ao Anki. Avalie: quais pontos ainda estão frágeis?",
+    "Revisão de fechamento Fase 1: Anki completo + mini-teste BBC Learning English.",
+  ]},
+  {w:[7,8,9], top:"Present Perfect vs Simple Past · Used to · Conditionals 1 e 2",
+   byDow:[
+    "Diferença PPresent Perfect vs Past: for/since vs ago. Cambridge Unit 10-11. 5 pares de frases contrastivas.",
+    "Estude Used to (Cambridge Unit 18). 'I used to live in...' vs 'I live in...'. 5 frases sobre seu passado.",
+    "Conditional 1 (If + Present → will): Cambridge Unit 38. Escreva 5 condicionais sobre situações reais.",
+    "Conditional 2 (If + Past → would): Cambridge Unit 39. Escreva 5 condicionais hipotéticas.",
+    "Adverbs: already, yet, just, still (Cambridge Unit 98). 5 frases de cada. Exercícios da unidade.",
+    "Escreva 120 palavras: 'If I could live anywhere in the world, I would...' — use Conditional 2 + Perfect.",
+    "Revisão: Anki + corrija o texto da sexta com LanguageTool. Adicione erros ao Anki.",
+  ]},
+  {w:[10,11,12],top:"Passive Voice · Relative Clauses · Reported Speech",
+   byDow:[
+    "Passive Voice presente e passado (Cambridge Unit 21-22). 'is made / was made'. 5 frases ativas → passivas.",
+    "Passive Voice: todos os tempos (Unit 21-23). Exercício: transforme 5 frases ativas em passivas.",
+    "Relative Clauses com who/which/that (Cambridge Unit 93-94). 5 frases relativas sobre pessoas e coisas.",
+    "Relative Clauses com where/whose/whom (Cambridge Unit 94-95). 5 frases. Leia artigo de RI e sublinhe as relativas.",
+    "Reported Speech: say/tell + that (Cambridge Unit 46-47). Transforme 5 frases diretas em indiretas.",
+    "Escreva 150 palavras sobre uma notícia de RI usando Passive + Relative + Reported Speech.",
+    "Revisão: Anki + corrija texto + releia Cambridge Units desta semana.",
+  ]},
+  {w:[13,14],  top:"Phrasal Verbs · Conectores Argumentativos · Revisão B1",
+   byDow:[
+    "Phrasal verbs com 'up': give up, pick up, set up, end up, come up with. 5 frases. Adicione ao Anki.",
+    "Phrasal verbs com 'out': find out, carry out, point out, run out, work out. 5 frases. Adicione ao Anki.",
+    "Conectores: however, although, despite, in spite of (Cambridge Unit 109-110). 5 frases contrastivas.",
+    "Conectores: therefore, as a result, consequently, moreover, furthermore. Escreva 5 frases argumentativas.",
+    "Revisão B1 total: faça o teste de revisão do Cambridge Grammar (Intermediate). Anote lacunas.",
+    "Escreva 200 palavras argumentativas sobre um tema de RI usando conectores da semana.",
+    "Revisão de fechamento Fase 2: Anki completo + mini-teste EF SET online.",
+  ]},
+  {w:[15,16,17,18],top:"Conditionals 3 e Mixed · Inversão Formal",
+   byDow:[
+    "Conditional 3 (If + Past Perfect → would have): Cambridge Unit 40. 5 frases de arrependimento ou hipótese passada.",
+    "Mixed Conditional (If + Past Perfect → would): situação passada com resultado presente. 5 frases.",
+    "Inversão formal: Not only... but also, Rarely..., Never... (Cambridge Unit 105). 5 frases formais.",
+    "Inversão: Should you need... / Had I known... / Were it not for... — 5 frases cada.",
+    "Escreva 150 palavras usando Conditionals 3+Mixed+Inversão: 'Had the treaty been signed...'",
+    "Corrija e adicione estruturas problemáticas ao Anki. Releia Cambridge Units desta semana.",
+    "Revisão: Anki + pratique inversão formal em voz alta (shadowing com texto formal).",
+  ]},
+  {w:[19,20,21,22],top:"Gerunds vs Infinitives · Discourse Markers · Collocações",
+   byDow:[
+    "Gerund vs Infinitive (Cambridge Unit 52-55). Verbos que pedem gerúndio: enjoy, avoid, suggest, consider. 5 frases.",
+    "Verbos que pedem infinitivo: want, decide, hope, seem, manage. 5 frases. Verbos que mudam de sentido: stop/remember.",
+    "Discourse markers: in contrast, on the other hand, as a result, to illustrate, in conclusion. 5 frases acadêmicas.",
+    "Collocações (make/do/have/take + noun): make a decision, do research, have an impact, take action. 10 collocações novas.",
+    "Nominalization: 'decide → decision', 'analyze → analysis'. Transforme 5 frases verbais em nominais.",
+    "Escreva essay de 250 palavras sobre tema de RI usando tudo da semana: discourse markers + collocações + nominalization.",
+    "Corrija essay com LanguageTool. Anki completo. Avalie: quantas collocações você usou naturalmente?",
+  ]},
+  {w:[23,24,25,26],top:"Revisão Cumulativa B1→B2 · Foco CACD",
+   byDow:[
+    "CACD: Traduza PT→EN um parágrafo de texto diplomático (200 palavras). Use dicionário somente ao final.",
+    "CACD: Leia texto autêntico em inglês (Foreign Affairs) e responda em português: qual é a tese? Quais os 3 argumentos?",
+    "CACD: Traduza EN→PT um parágrafo de texto jurídico internacional. Foco em naturalidade e fidelidade.",
+    "Revisão Passive Voice em todos os tempos + Conditionals 1-3. Crie 2 frases em cada combinação.",
+    "CACD: Simule uma questão de interpretação: leia texto + responda 3 perguntas em português em 20 minutos.",
+    "Escreva essay 250 palavras estilo CACD: argumento formal em inglês sobre política internacional.",
+    "Revisão: Anki + corrija essay + releia traduções da semana.",
+  ]},
+  {w:[27,28,29,30],top:"Polimento B2 · Vocabulário Acadêmico · Preparação EF SET",
+   byDow:[
+    "Academic Word List: estude as 10 primeiras palavras do nível 4 em contexto. Exercícios no AW List site.",
+    "Collocações avançadas: strong argument, reach a consensus, pose a challenge, tackle an issue. 10 novas.",
+    "Register: reescreva 3 frases informais em inglês formal acadêmico. Estude diferenças de registro.",
+    "Simulado EF SET: faça a seção de Reading do teste gratuito. Anote erros e vocabulário desconhecido.",
+    "Simulado EF SET: faça a seção de Listening. Adicione vocabulário novo ao Anki.",
+    "Escreva essay final de 300 palavras: tema de RI à sua escolha. Sem dicionário.",
+    "Revisão final: Anki completo. Corrija essay. Planeje fazer o EF SET completo esta semana.",
+  ]},
+];
+
+// ── Inglês: input por dia da semana ──────────────────
+const EN_INPUT=[
+  // DOW 0 Dom - leitura
+  ["BBC Learning English — artigo A2. Leia sem dicionário, depois cheque palavras desconhecidas.",
+   "BBC Learning English — artigo B1. Sublinhe 5 palavras novas e adicione ao Anki.",
+   "The Guardian — notícia curta de RI. Resuma em 3 frases em inglês.",
+   "The Guardian — editorial de política. Identifique: tese + 2 argumentos.",
+   "The Economist — parágrafo introdutório de artigo. Leia 2x. Traduza a tese principal.",
+   "Foreign Affairs — intro de artigo. Identifique discourse markers usados.",
+   "Foreign Affairs — artigo completo (curto). Resuma em 200 palavras em inglês.",
+   "The Economist — artigo de RI. Leia e escreva 100 palavras de análise crítica.",
+   "Reuters ou BBC News — texto de política internacional. Identifique voz passiva no texto.",
+   "Foreign Affairs — artigo longo. Leia sem dicionário. Avalie sua compreensão: 60%? 80%?"],
+  // DOW 1 Seg - leitura
+  ["BBC Learning English — matéria de cotidiano. Leia e responda as perguntas do site.",
+   "The Guardian — artigo curto. Leia e anote 5 conectores usados.",
+   "BBC News — notícia internacional. Identifique: quem, o que, onde, quando, por quê.",
+   "The Guardian — artigo de ciência/tecnologia. Resuma a ideia principal em 2 frases.",
+   "The Economist — artigo de economia. Leia e escreva 3 perguntas sobre o texto.",
+   "Foreign Affairs — artigo de segurança internacional. Anote vocabulário técnico.",
+   "Foreign Affairs ou Reuters — texto diplomático. Identifique Reported Speech no texto.",
+   "The Economist — artigo completo. Resuma argumentos em inglês (100 palavras).",
+   "Texto acadêmico CACD estilo (PDF de RI). Leia e interprete: tese + evidências.",
+   "Simulado CACD: texto de 300 palavras + 3 perguntas de interpretação em português."],
+  // DOW 2 Ter - listening
+  ["6 Minute English (BBC) — ouça com transcript. Leia depois. 3 palavras novas → Anki.",
+   "6 Minute English — ouça sem transcript primeiro, depois confira. % de compreensão?",
+   "All Ears English Podcast — episódio de 15min. Anote expressões novas.",
+   "All Ears English — ouça e repita frases em voz alta (shadowing — 5 min).",
+   "TED Talk (8-10min) com legenda em inglês. Identifique discourse markers usados.",
+   "TED Talk (10min) — ouça sem legenda. % de compreensão? Ouça de novo com legenda.",
+   "TED Talk (12min) sem legenda. Resuma em inglês (3 frases) o que entendeu.",
+   "Podcast de RI (Council on Foreign Relations — The President's Inbox). 15min.",
+   "BBC World Service — 5min de noticiário. Transcreva mentalmente o que ouviu.",
+   "TED Talk de tema diplomático ou RI. Ouça sem legenda e escreva 100 palavras de resumo."],
+  // DOW 3 Qua - leitura
+  ["BBC Learning English — dialogue ou grammar point. Leia e complete exercícios do site.",
+   "The Guardian — artigo de meio ambiente. 5 palavras novas → Anki.",
+   "BBC News — texto de política. Identifique: qual é o ponto de vista do autor?",
+   "The Guardian — artigo de sociedade. Escreva 2 frases de opinião sobre o tema.",
+   "The Economist — análise política. Identifique adjetivos formais usados. 5 novos → Anki.",
+   "Foreign Affairs — artigo de direito internacional. Vocabulary técnico → Anki.",
+   "Artigo de RI — identifique todas as collocações formais. Adicione ao Anki.",
+   "The Economist — artigo econômico. Leia e explique em 100 palavras sem consultar.",
+   "CACD: texto em inglês + tradução EN→PT (parágrafo). Foco em naturalidade.",
+   "Simulado EF SET: seção de Reading do teste oficial. Anote onde errou."],
+  // DOW 4 Qui - listening
+  ["6 Minute English (BBC) — episódio novo. Com transcript. Shadowing: repita 3 frases.",
+   "6 Minute English — episódio mais avançado. Sem transcript. % compreensão?",
+   "All Ears English — ouça e anote 3 expressões idiomáticas ou collocações.",
+   "TED Talk (10min) com legenda EN. Pause e repita frases difíceis (shadowing).",
+   "TED Talk (12min) sem legenda. Anote palavras que não entendeu. Confira depois.",
+   "Podcast Council on Foreign Relations — 15-20min. Resuma em 3 frases.",
+   "BBC World Service noticiário + entrevista (10min). Compreensão?",
+   "TED Talk de tema político-social (15min). Sem legenda. Resuma.",
+   "Podcast de RI avançado (Foreign Policy podcast — 15min). Anote vocabulário.",
+   "Simulado EF SET: seção de Listening. Anote onde errou e por quê."],
+  // DOW 5 Sex - leitura
+  ["BBC Learning English — artigo A2/B1. Leia e complete os exercícios interativos.",
+   "The Guardian — artigo de cultura/educação. Leia e escreva 3 frases de reação.",
+   "BBC News — notícia de RI. Identifique: qual é a posição do país mencionado?",
+   "The Guardian — artigo de economia. Identifique Passive Voice. Quantas instâncias?",
+   "The Economist — artigo de RI. Sublinhe as collocações formais. Adicione ao Anki.",
+   "Foreign Affairs — artigo diplomático. CACD: interprete a tese em português.",
+   "The Economist — editorial. Leia e escreva 150 palavras de análise crítica.",
+   "Foreign Affairs — artigo longo de RI. Leia sem dicionário. Qual foi sua compreensão?",
+   "CACD simulado: texto de 400 palavras em inglês + perguntas de interpretação.",
+   "Artigo acadêmico em inglês de tema de mestrado. Leia introdução + conclusão."],
+  // DOW 6 Sáb - review day
+  ["Releia o texto que mais gostou esta semana. Sublinhe expressões que quer usar.",
+   "Revise todos os inputs da semana: qual foi o mais difícil? Por quê?",
+   "Escolha 1 texto da semana e traduzinja o parágrafo principal EN→PT.",
+   "Leia 1 artigo curto novo + revise vocabulário da semana no Anki.",
+   "Releia o texto de RI da semana e escreva 100 palavras de análise.",
+   "Revisão de vocabulário técnico de RI da semana: consegue usar as palavras em frases?",
+   "Simulado de leitura: 1 texto + 5 perguntas de compreensão em 15 minutos.",
+   "Leia artigo de RI em inglês e resuma em português (estilo CACD: 100 palavras).",
+   "Revisão: releia todos os textos desta semana. Qual vocabulário ainda não fixou?",
+   "Revisão final: artigo desafiador do The Economist. Leia com dicionário. Anote tudo."],
+];
+
+// ── Inglês: output por dia da semana ──────────────────
+const EN_OUTPUT=[
+  // DOW 0 Dom - speaking
+  ["Grave 2 min descrevendo sua rotina de hoje em inglês. Foco: Simple Present.",
+   "Grave 2 min: 'My week in review' — o que aconteceu? Use Simple Past.",
+   "Grave 2 min: descreva sua cidade ou bairro. Use Present Continuous + preposições.",
+   "Grave 2 min: 'If I could change one thing about my life...' — use Conditional 2.",
+   "Grave 3 min opinando sobre uma notícia de RI que leu esta semana.",
+   "Grave 3 min argumentando: você concorda com a política X? Use conectores formais.",
+   "Grave 3 min livre: qualquer tema. Depois ouça e anote 3 erros que cometeu.",
+   "Grave 3 min resumindo um artigo do The Economist que leu. Use discourse markers.",
+   "Grave 3 min estilo CACD: apresente sua posição sobre um tema diplomático.",
+   "Grave 5 min: debate consigo mesmo sobre um tema de RI. Argumento + contra-argumento."],
+  // DOW 1 Seg - writing
+  ["Escreva 5 frases sobre seu dia usando Simple Present e Simple Past.",
+   "Escreva 1 parágrafo (80 palavras) sobre um lugar que você gosta. Use preposições.",
+   "Traduza 1 parágrafo PT→EN (tema: rotina ou trabalho). Foco em tempos verbais.",
+   "Escreva 5 frases usando Used to + 5 frases usando Conditional 1.",
+   "Escreva 1 parágrafo de 100 palavras sobre um problema ambiental. Use Passive Voice.",
+   "Escreva 150 palavras argumentativas: 'Should [tema de RI] happen?' Use conectores.",
+   "Escreva 1 parágrafo formal (100 palavras) com inversão e linguagem acadêmica.",
+   "Escreva 200 palavras: análise de um tema de política internacional. Use collocações.",
+   "CACD: Traduza PT→EN um parágrafo diplomático de 100 palavras. Sem dicionário durante.",
+   "Escreva essay de 300 palavras: introdução + 2 argumentos + conclusão. Tema de RI."],
+  // DOW 2 Ter - writing
+  ["Escreva 5 frases no diário: o que aconteceu hoje? Use Simple Past + adjetivos.",
+   "Escreva 1 parágrafo comparando 2 países, pessoas ou sistemas. Use comparativos.",
+   "Traduza 1 parágrafo PT→EN (tema: política ou meio ambiente). Cheque depois.",
+   "Escreva 5 frases com Conditional 2 sobre situações hipotéticas da sua vida.",
+   "Escreva 1 parágrafo de 100 palavras usando Relative Clauses: 'The country that / which...'",
+   "Escreva 150 palavras: uma proposta de política pública em inglês. Use conectores formais.",
+   "Escreva parágrafo com inversão formal: 'Not only has Brazil... but it has also...'",
+   "Escreva 200 palavras de crítica a um artigo do The Economist. Use discourse markers.",
+   "CACD: Traduza EN→PT parágrafo de texto jurídico internacional. Foco em naturalidade.",
+   "Escreva essay de 300 palavras. Escolha um tema de RI. Submeta para grading (LanguageTool)."],
+  // DOW 3 Qua - speaking
+  ["Grave 2 min: descreva o que está acontecendo em uma foto ou cena. Use Continuous.",
+   "Grave 2 min: 'The best decision I ever made was...' — use Simple Past.",
+   "Grave 2 min: opinião sobre uma notícia do dia. Foco: Present Perfect ('I have seen that...')",
+   "Grave 2 min: 'What would you do if you were president?' — use Conditional 2.",
+   "Grave 3 min: resuma uma notícia de RI em inglês. Use Passive Voice naturalmente.",
+   "Grave 3 min: apresente 2 lados de um debate de RI. Use conectores: on the other hand...",
+   "Grave 3 min: discurso formal curto usando inversão e estruturas B2.",
+   "Grave 3 min: análise de tema político usando collocações e discourse markers.",
+   "Grave 3 min: responda uma questão estilo CACD oral sobre política externa.",
+   "Grave 5 min: apresentação formal sobre um tema de RI. Estrutura: intro+3 pontos+conclusão."],
+  // DOW 4 Qui - writing
+  ["Escreva 5 frases sobre planos futuros. Use will e going to.",
+   "Escreva 1 parágrafo de 80 palavras sobre uma experiência recente. Use Present Perfect.",
+   "Escreva um email curto (100 palavras) em inglês formal sobre um tema acadêmico.",
+   "Escreva 5 Conditionals 1 + 5 Conditionals 2 sobre situações de RI.",
+   "Escreva 100 palavras: resumo de um artigo usando Reported Speech ('The author argues that...')",
+   "Escreva 150 palavras: análise de um tratado ou política internacional. Use Passive + conectores.",
+   "Escreva parágrafo acadêmico de 100 palavras com gerunds e discourse markers.",
+   "Escreva 200 palavras: compare duas posições sobre um tema de RI usando collocações.",
+   "CACD: Escreva tradução EN→PT de trecho de resolução da ONU (100 palavras).",
+   "Escreva email acadêmico formal para um professor de mestrado. 200 palavras. Sem erros."],
+  // DOW 5 Sex - writing
+  ["Escreva 5 frases no diário em inglês. Qualquer tema. Foco: não use o tradutor.",
+   "Escreva 1 parágrafo de 80 palavras usando superlativos e comparativos.",
+   "Traduza 1 parágrafo EN→PT (texto autêntico). Foco: naturalidade em português.",
+   "Escreva 5 pares de frases: versão simples → versão com Conditional + conector formal.",
+   "Escreva 150 palavras argumentativas. Tema: um desafio das relações internacionais hoje.",
+   "Escreva email formal de 150 palavras solicitando participação em evento acadêmico.",
+   "Escreva 200 palavras formais: análise de uma crise diplomática. Sem phrasal verbs informais.",
+   "Escreva essay de 250 palavras. Siga estrutura: intro (50) + arg1 (80) + arg2 (80) + concl (40).",
+   "CACD: Simulado de tradução. PT→EN: 200 palavras de texto diplomático. Tempo: 25 minutos.",
+   "Escreva essay de 300 palavras. Revise e corrija. Avalie: está no nível B2?"],
+  // DOW 6 Sáb - speaking + review
+  ["Grave 2 min contando o que estudou esta semana em inglês.",
+   "Grave 2 min: 'The most useful thing I learned this week was...'",
+   "Grave 2 min: leia em voz alta seu parágrafo mais difícil da semana.",
+   "Grave 3 min: simule um debate: você argumenta + contra-argumenta.",
+   "Grave 3 min: apresente em inglês um tema que você domina bem (área de estudo).",
+   "Grave 3 min: 'In conclusion, I believe that...' — conclua um debate da semana.",
+   "Grave 3 min: use 3 frases com inversão formal em contexto de discurso político.",
+   "Grave 3 min: use 5 collocações da semana em frases naturais e fluentes.",
+   "Grave 3 min estilo CACD: apresentação oral sobre política externa brasileira.",
+   "Grave 5 min: apresentação completa sobre um tema de RI. Avalie sua fluência."],
+];
+
+// ── Inglês: vocabulário por semana ──────────────────
+const EN_VOCAB=[
+  "Rotina diária e trabalho: schedule, commute, deadline, task, colleague",
+  "Lugares e direções: downtown, neighbourhood, intersection, landmark, district",
+  "Família e relações: sibling, spouse, colleague, acquaintance, mentor",
+  "Alimentação: cuisine, ingredient, portion, nutritious, flavour",
+  "Tempo e clima: forecast, drought, humidity, heatwave, temperature",
+  "Compras e dinheiro: budget, transaction, discount, expenditure, receipt",
+  "Política e governo: parliament, legislation, amendment, bureaucracy, referendum",
+  "Meio ambiente: sustainable, emissions, deforestation, renewable, biodiversity",
+  "Economia: inflation, gdp, recession, trade deficit, fiscal policy",
+  "Relações Internacionais: diplomacy, sovereignty, multilateral, sanction, treaty",
+  "Ciência e tecnologia: innovation, algorithm, data breach, artificial intelligence, prototype",
+  "Educação e sociedade: literacy, curriculum, inequality, integration, welfare",
+  "Academic Word List: analyse, concept, context, evident, significant",
+  "Direito Internacional: jurisdiction, arbitration, resolution, protocol, ratification",
+  "Segurança global: deterrence, proliferation, ceasefire, humanitarian, intervention",
+  "Comércio exterior: tariff, quota, subsidy, export, trade surplus",
+  "CACD temático: negotiate, alliance, bilateral, memorandum, communiqué",
+  "Expressões formais: notwithstanding, pursuant to, hereby, whereas, aforementioned",
+  "AWL nível 4: apparent, commitment, framework, interpretation, mechanism",
+  "AWL nível 5: contradiction, implication, paradigm, preliminary, subsequent",
+  "Collocações RI: reach an agreement, impose sanctions, maintain sovereignty, launch an initiative",
+  "Vocabulário argumentativo: advocate, contend, refute, assert, corroborate",
+  "Terminologia diplomática: ratify, accede, denounce, negotiate, mediate",
+  "Falsos cognatos: actually (na verdade), eventually (finalmente), sensible (sensato)",
+  "AWL nível 6: coherent, constitute, discriminate, inherent, ongoing",
+  "AWL nível 7: ambiguous, diminish, explicit, implicit, rhetoric",
+  "Collocações acadêmicas: conduct research, draw a conclusion, pose a question, raise awareness",
+  "Register formal: henceforth, notwithstanding, pursuant, thereto, whereby",
+  "Revisão cumulativa 1: releia deck completo — foco nas marcadas como 'difícil'",
+  "Revisão cumulativa 2: teste-se sem o Anki — escreva 5 frases com 5 palavras à sua escolha",
+];
+
+// ── Francês ──────────────────────────────────────────
+const FR_GRAM=[
+  {w:[1,2],   top:"Alphabet, sons, saudações e apresentações",
+   byDow:[
+    "Ouça o alphabet em francês (YouTube). Pratique a pronúncia de 'u', 'r', 'ou', 'eu'. Diga o seu nome em francês.",
+    "Aprenda: Bonjour, Bonsoir, Au revoir, Merci, S'il vous plaît. Escreva 3 diálogos de apresentação.",
+    "Estude verbo être: je suis, tu es, il/elle est... Escreva 5 frases: 'Je suis étudiante.'",
+    "Estude verbo avoir: j'ai, tu as, il a... Escreva 5 frases: 'J'ai 25 ans. J'ai un livre.'",
+    "Gênero dos substantivos: le/la/un/une. Aprenda 10 palavras com artigo. Regras de gênero básicas.",
+    "Pronomes pessoais: je, tu, il, elle, nous, vous, ils, elles. 5 frases com cada pronome.",
+    "Revisão: diga em francês — seu nome, sua profissão, sua idade, seu país.",
+  ]},
+  {w:[3,4],   top:"Présent de l'indicatif — verbos -er regulares",
+   byDow:[
+    "Conjugue parler, aimer, travailler no présent. Escreva 5 frases sobre sua rotina.",
+    "Conjugue manger, voyager, étudier. Escreva 5 frases. Adicione ao Anki.",
+    "Números 1-100: aprenda de 1-30. Escreva sua data de nascimento em francês.",
+    "Números 31-100. Escreva 5 frases com números: 'J'ai 27 ans. Il y a 30 étudiants.'",
+    "Artigos: le/la/les/un/une/des. Diferença artigo definido vs indefinido. 10 exemplos.",
+    "Adjetivos: posição (depois do substantivo). Concordância. 'une femme intelligente'. 5 frases.",
+    "Revisão: escreva um parágrafo curto de 40 palavras sobre sua rotina em francês.",
+  ]},
+  {w:[5,6],   top:"Présent — verbos irregulares: aller, faire, venir, pouvoir, vouloir",
+   byDow:[
+    "Conjugue aller: je vais, tu vas... 5 frases: 'Je vais à l'université. Tu vas bien?'",
+    "Conjugue faire: je fais, tu fais... 5 frases sobre atividades: 'Je fais du sport.'",
+    "Conjugue venir: je viens, tu viens... 5 frases. Diferença: aller (ir) vs venir (vir).",
+    "Conjugue pouvoir e vouloir: 'Je veux apprendre. Tu peux m'aider?' 5 frases cada.",
+    "Negação: ne...pas. 'Je ne suis pas française. Il n'a pas de voiture.' 5 frases negativas.",
+    "Perguntas: Est-ce que...? / Qu'est-ce que...? / Où? Quand? Comment? 5 perguntas.",
+    "Revisão: grave 1 min apresentando-se em francês. Ouça e corrija.",
+  ]},
+  {w:[7,8,9], top:"Passé composé com avoir e être",
+   byDow:[
+    "Formação: avoir/être + particípio passado. Particípios de verbos -er: parlé, mangé, étudié.",
+    "Passé composé com avoir: 'J'ai mangé, tu as parlé...' 5 frases sobre o que fez ontem.",
+    "Verbos com être: aller, venir, partir, arriver, naître, mourir + reflexivos. Concordância.",
+    "Passé composé com être: 'Je suis allée, elle est venue...' 5 frases. Atenção ao gênero.",
+    "Adverbes de temps: hier, avant-hier, déjà, jamais, encore. 'J'ai déjà visité Paris.' 5 frases.",
+    "Escreva 5 frases sobre o que você fez esta semana. Use Passé composé. 40 palavras.",
+    "Revisão: podcast 'Français avec Pierre' (débutant). 5 minutos. Anote palavras novas.",
+  ]},
+  {w:[10,11,12],top:"Imparfait + diferença com Passé Composé",
+   byDow:[
+    "Formação Imparfait: radical do présent (nous) + -ais/-ais/-ait/-ions/-iez/-aient. 5 exemplos.",
+    "Uso: imparfait = descrição/hábito no passado. 'Quand j'étais enfant, je jouais...' 5 frases.",
+    "Contraste: Passé composé (ação pontual) vs Imparfait (fundo/descrição). 5 pares de frases.",
+    "Futur proche: aller + infinitif. 'Je vais travailler. Elle va partir.' 5 frases sobre planos.",
+    "Pronomes COD: le/la/les. 'Je le lis. Tu la vois.' 5 frases com substituição de objeto.",
+    "Escreva uma mini-história de 60 palavras em francês usando Passé composé + Imparfait.",
+    "Lawless French: exercícios de Imparfait vs Passé composé. Corrija e adicione ao Anki.",
+  ]},
+  {w:[13,14],  top:"Futur simple + Conditionnel présent",
+   byDow:[
+    "Futur simple: radical + terminações -ai/-as/-a/-ons/-ez/-ont. 'Je parlerai, tu viendras.' 5 frases.",
+    "Futur irrégulares: être→sera, avoir→aura, aller→ira, faire→fera. 5 frases com cada.",
+    "Conditionnel: même radical futur + terminações imparfait: -ais/-ais/-ait. 'Je voudrais...' 5 frases.",
+    "Si + présent → futur (hypothèse réelle): 'Si tu travailles, tu réussiras.' 5 frases.",
+    "Vocabulário: meios de transporte, viagens. 'le train, l'avion, le métro, la voiture.' 10 palavras + frases.",
+    "Escreva 50 palavras em francês: seus planos para o próximo mês. Use Futur simple.",
+    "Revisão A2: RFI Savoirs — leia 1 texto niveau débutant. Anote palavras desconhecidas.",
+  ]},
+  {w:[15,16,17,18],top:"Subjonctif présent (intro) + Pronomes relatifs",
+   byDow:[
+    "Subjonctif: formação (elles/ils présent → -e/-es/-e/-ions/-iez/-ent). Verbos regulares.",
+    "Subjonctif: usos com il faut que, je veux que, il est important que. 5 frases.",
+    "Pronome relatif que (objeto): 'Le livre que je lis est intéressant.' 5 frases.",
+    "Pronome relatif qui (sujeito): 'La personne qui travaille ici...' 5 frases. Contraste que/qui.",
+    "Pronomes dont e où: 'Le pays dont je parle... / La ville où j'habite...' 5 frases.",
+    "Escreva 60 palavras: opinião sobre um tema usando pronomes relatifs + subjonctif.",
+    "innerFrench (Podcast): ouça 5 min. Identifique subjonctif e relatifs. Anote 5 palavras.",
+  ]},
+  {w:[19,20,21,22],top:"Discours indirect + Pronomes y e en",
+   byDow:[
+    "Discours indirect: il dit que, il a dit que... Concordância de tempos. 5 transformações.",
+    "Pronome y: substitui 'à + lugar/coisa'. 'J'y vais. Tu y penses?' 5 frases.",
+    "Pronome en: substitui 'de + coisa/quantidade'. 'J'en ai besoin. Tu en veux?' 5 frases.",
+    "Revisão Passé composé vs Imparfait: escreva uma história curta (60 palavras) usando os dois.",
+    "Conectores: cependant, néanmoins, par conséquent, pourtant. 5 frases formais.",
+    "Escreva 80 palavras sobre um tema de atualidade em francês. Use conectores formais.",
+    "TV5 Monde: assista 5 min de vídeo com legenda FR. Anote expressões novas.",
+  ]},
+  {w:[23,24,25,26],top:"Plus-que-parfait + Voix passive (intro)",
+   byDow:[
+    "Plus-que-parfait: avoir/être (imparfait) + particípio. 'J'avais mangé. Elle était partie.' 5 frases.",
+    "Uso: evento anterior a outro passado. 'Quand je suis arrivée, il était déjà parti.' 5 frases.",
+    "Voix passive: être + particípio. 'Le projet est soutenu. La loi a été votée.' 5 frases.",
+    "Conectores argumentativos: d'une part/d'autre part, en outre, en revanche, ainsi. 5 frases.",
+    "Leia texto curto em francês (RFI Savoirs niveau intermédiaire). Resuma em 2 frases.",
+    "Escreva 80 palavras formais em francês sobre um tema de atualidade. Use Plus-que-parfait.",
+    "Coffee Break French: episode do nível B1. 15 min. Anote 5 pontos gramaticais novos.",
+  ]},
+  {w:[27,28,29,30],top:"Revisão B1 completa · Expressões idiomáticas",
+   byDow:[
+    "Revisão total: faça exercícios de revisão de todos os tempos verbais (Lawless French).",
+    "Expressões idiomáticas: avoir le cafard, se casser la tête, prendre son temps. 5 novas.",
+    "Vocabulário DELF B1: 20 palavras de temas DELF (société, environnement, travail).",
+    "Simulado DELF B1: exercício de compreensão escrita (15 min). Corrija e anote erros.",
+    "Simulado DELF B1: exercício de compreensão oral (15 min). RFI ou France Inter.",
+    "Escreva 100 palavras em francês: um texto argumentativo sobre um tema de atualidade.",
+    "Revisão final: Anki completo FR. Grave 2 min falando sobre qualquer tema em francês.",
+  ]},
+];
+
+// ── Espanhol ──────────────────────────────────────────
+const ES_GRAM=[
+  {w:[1,2],   top:"Alphabet, pronúncia (diferenças PT-ES), saudações",
+   byDow:[
+    "Ouça o alphabet espanhol. Foco: ñ, ll, rr, j, h. Compare com português: diferenças de pronúncia.",
+    "Aprenda: Hola, Buenos días, Gracias, Por favor, ¿Cómo estás? Escreva 3 diálogos.",
+    "Verbo ser: soy, eres, es, somos, sois, son. 5 frases: 'Soy estudiante. Ella es brasileña.'",
+    "Verbo estar: estoy, estás, está... Diferença básica ser vs estar. 5 frases de cada.",
+    "Gênero e número: el/la/los/las, un/una. Regras básicas. 10 palavras com artigo.",
+    "Pronomes pessoais: yo, tú, él/ella, nosotros, vosotros/ustedes, ellos. 5 frases.",
+    "Revisão: diga em espanhol — nome, profissão, idade, país, cidade.",
+  ]},
+  {w:[3,4],   top:"Presente de indicativo — verbos regulares -ar/-er/-ir",
+   byDow:[
+    "Verbos -ar: hablar, trabajar, estudiar. Conjugação completa. 5 frases sobre sua rotina.",
+    "Verbos -er: comer, beber, leer. Conjugação. 5 frases. Compare com PT: semelhanças.",
+    "Verbos -ir: vivir, escribir, abrir. 5 frases. Adicione ao Anki conjugações problemáticas.",
+    "Números 1-100. Dias da semana e meses. Escreva sua data de nascimento em espanhol.",
+    "Adjetivos: posição (geralmente após substantivo). Concordância. 'una mujer inteligente'. 5 frases.",
+    "Hay (existe/há) vs está/están. 'Hay un libro. El libro está en la mesa.' 5 pares.",
+    "Revisão: escreva um parágrafo de 40 palavras sobre sua rotina em espanhol.",
+  ]},
+  {w:[5,6],   top:"Presente — verbos irregulares: ser, estar, tener, ir, hacer, poder, querer",
+   byDow:[
+    "Tener: tengo, tienes, tiene... 'Tengo 25 años. ¿Tienes tiempo?' 5 frases. Compare com PT.",
+    "Ir: voy, vas, va... + a + infinitivo (futuro próximo). 'Voy a estudiar. ¿Vas al trabajo?' 5 frases.",
+    "Hacer: hago, haces, hace... 'Hago deporte. ¿Qué haces el fin de semana?' 5 frases.",
+    "Poder e querer: 'Puedo hablar. Quiero aprender.' 5 frases. Usos modais.",
+    "Verbos reflexivos: llamarse, levantarse, llamarse. 'Me llamo Ana. Me levanto a las 7.' 5 frases.",
+    "Interrogativos: ¿Qué? ¿Quién? ¿Dónde? ¿Cuándo? ¿Por qué? ¿Cómo? 5 perguntas cada.",
+    "Revisão: grave 1 min apresentando-se em espanhol. Ouça e corrija.",
+  ]},
+  {w:[7,8,9], top:"Pretérito Indefinido (Perfecto Simple)",
+   byDow:[
+    "Verbos regulares -ar: hablé, hablaste, habló... 'Ayer hablé con mi jefa.' 5 frases.",
+    "Verbos regulares -er/-ir: comí, bebí, viví... 5 frases sobre o que fez ontem.",
+    "Verbos irregulares: ser/ir→fui, tener→tuve, estar→estuve, hacer→hice. 5 frases cada.",
+    "Verbos irregulares: poder→pude, querer→quise, decir→dije, venir→vine. 5 frases.",
+    "Marcadores temporais: ayer, anteayer, la semana pasada, el año pasado, hace dos días. 5 frases.",
+    "Escreva 5 frases sobre o que fez na semana. Use Pretérito Indefinido. Compare com PT.",
+    "Dreaming Spanish (nivel principiante): 10 min. Identifique verbos no passado. Anote.",
+  ]},
+  {w:[10,11,12],top:"Pretérito Imperfecto + diferença com Indefinido",
+   byDow:[
+    "Imperfecto formação: -aba/-abas/-aba/-ábamos/-abais/-aban (ar) e -ía/-ías (er/ir). 5 exemplos.",
+    "Uso: descrição/hábito no passado. 'Cuando era niña, vivía en...' 5 frases.",
+    "Contraste: Indefinido (ação completa) vs Imperfecto (fundo/estado). 5 pares.",
+    "Ir a + infinitivo (futuro próximo): 'Voy a estudiar. ¿Vas a venir?' 5 frases sobre planos.",
+    "Pronomes OD: lo/la/los/las. 'Lo veo. La conozco.' 5 frases com substituição.",
+    "Por vs para (introdução): por=causa/duração, para=propósito/destino. 5 pares de frases.",
+    "SpanishDict: exercícios de Imperfecto vs Indefinido. Anote erros e adicione ao Anki.",
+  ]},
+  {w:[13,14],  top:"Futuro Simple + Condicional Simple",
+   byDow:[
+    "Futuro simple: infinitivo + é/ás/á/emos/éis/án. 'Estudiaré. ¿Vendrás?' 5 frases.",
+    "Futuros irregulares: tener→tendré, poder→podré, hacer→haré, decir→diré. 5 frases.",
+    "Condicional: infinitivo + ía/ías/ía/íamos/íais/ían. 'Estudiaría más. ¿Vendrías?' 5 frases.",
+    "Si + presente → futuro: 'Si estudias, aprenderás.' 5 frases de condição real.",
+    "Revisão Ser vs Estar completa: permanente/identidade (ser) vs estado/localização (estar). 10 pares.",
+    "Escreva 50 palavras em espanhol: seus planos para o próximo mês. Use Futuro simple.",
+    "Extra en Español (YouTube): episódio 1. Assista e anote expressões novas.",
+  ]},
+  {w:[15,16,17,18],top:"Subjuntivo presente (intro) + Pronomes relativos",
+   byDow:[
+    "Subjuntivo formação: presente → 1a singular → troque vogal temática. Regular: hable, coma, viva.",
+    "Uso com querer que/esperar que/necesitar que: 'Quiero que vengas.' 5 frases.",
+    "Pronome relativo que (sujeito e objeto): 'La persona que trabaja. El libro que leo.' 5 frases.",
+    "Pronomes quien/donde: 'La persona con quien hablo. El lugar donde vivo.' 5 frases.",
+    "Expressões de desejo e dúvida com subjuntivo: 'Es posible que llueva. Ojalá puedas.' 5 frases.",
+    "Escreva 60 palavras em espanhol: opinião sobre um tema usando relativos + subjuntivo.",
+    "BBC Mundo: leia 1 notícia curta. Identifique verbos no subjuntivo. Anote.",
+  ]},
+  {w:[19,20,21,22],top:"Pretérito Perfecto Compuesto + Estilo indireto",
+   byDow:[
+    "Pretérito Perfecto: haber (presente) + participio. 'He comido. ¿Has visto eso?' 5 frases.",
+    "Diferença regional: Espanha usa Perfecto p/ passado recente; América Latina usa Indefinido. Exemplos.",
+    "Estilo indireto: 'Dijo que...' Concordância de tempos. 5 transformações de diálogo direto.",
+    "Conectores formais: sin embargo, por lo tanto, aunque, por otro lado, además. 5 frases.",
+    "Vocabulário: meios de comunicação e tecnologia. 'la red social, la aplicación, el algoritmo.' 10 palavras.",
+    "Escreva 80 palavras sobre um tema de atualidade em espanhol. Use conectores formais.",
+    "Español con Juan: episódio de nível A2/B1. 10 min. Anote 5 palavras novas.",
+  ]},
+  {w:[23,24,25,26],top:"Pluscuamperfecto + Voz pasiva (intro)",
+   byDow:[
+    "Pluscuamperfecto: haber (imperfecto) + participio. 'Había comido. Ya habían llegado.' 5 frases.",
+    "Uso: evento anterior a outro passado. 'Cuando llegué, él ya había salido.' 5 frases.",
+    "Voz pasiva: ser + participio + por. 'El tratado fue firmado por los presidentes.' 5 frases.",
+    "Conectores formais: asimismo, no obstante, en consecuencia, cabe señalar. 5 frases.",
+    "BBC Mundo: leia artigo de política latinoamericana. Identifique Pluscuamperfecto. Anote vocabulário.",
+    "Escreva 80 palavras formais em espanhol sobre relações internacionais. Use voz passiva.",
+    "Notes in Spanish (podcast): episódio B1. 15 min. Anote 5 palavras e 2 expressões.",
+  ]},
+  {w:[27,28,29,30],top:"Revisão B1 completa · Falsos cognatos PT-ES",
+   byDow:[
+    "Revisão total: exercícios de todos os tempos verbais no SpanishDict. Anote lacunas.",
+    "Falsos cognatos 1-25: borracha=goma de borrar; polvo=pó; embarazada=grávida; vaso=copo. Escreva frases.",
+    "Falsos cognatos 26-50: borrar=apagar; largo=comprido; salada=savory; policia=policial. Frases.",
+    "Vocabulário DELE B1: 20 palavras de temas DELE (sociedad, trabajo, viajes, cultura).",
+    "Simulado DELE B1: exercício de compreensão escrita (15 min). Corrija e anote erros.",
+    "Escreva 100 palavras em espanhol: texto argumentativo sobre um desafio da América Latina.",
+    "Revisão final: Anki completo ES. Grave 2 min falando sobre qualquer tema em espanhol.",
+  ]},
+];
+
+// ── Vocabuário por semana FR e ES ──────────────────
+const FR_VOC=["Saudações, números e cores","Família e casa","Alimentação e compras","Cidade e transporte","Trabalho e estudos","Saúde e corpo","Hobbies e cultura","Viagens","Meio ambiente","Política e sociedade","Mídia e tecnologia","RI e diplomacia (DELF)"];
+const ES_VOC=["Saludos, números y colores","Familia y casa","Alimentación y compras","Ciudad y transporte","Trabajo y estudios","Salud y cuerpo","Hobbies y cultura","Viajes","Medio ambiente","Política y sociedad","Medios y tecnología","RI y diplomacia (DELE)"];
+
+// ── Revisões ──────────────────────────────────────────
+const REVIEWS=[
+  {id:'anki_sun',  name:'Anki — revisão completa dos 3 decks (EN + FR + ES)', when:'Todo domingo'},
+  {id:'vocab_tue', name:'Vocabulário EN das últimas 2 semanas', when:'Toda terça-feira'},
+  {id:'gram_wed',  name:'Gramática desta semana nos 3 idiomas', when:'Toda quarta-feira'},
+  {id:'fr_thu',    name:'Revisão rápida gramática FR (releia exemplos no Anki)', when:'Toda quinta-feira'},
+  {id:'es_fri',    name:'Revisão rápida gramática ES (releia exemplos no Anki)', when:'Toda sexta-feira'},
+  {id:'output_sat',name:'Releitura do output da semana — fala e escrita', when:'Todo sábado'},
+];
+
+// ── Marcos ──────────────────────────────────────────
+const MILESTONES=[
+  {date:new Date(2026,6,5),  lang:'en',label:'EN · Marco A2 consolidado',desc:'Conversa 3 min fluente · 10 frases corretas · 6 Min English sem transcript'},
+  {date:new Date(2026,6,5),  lang:'fr',label:'FR · Marco A1 completo',desc:'Présent dominado · 200 palavras no Anki · apresentação pessoal fluente'},
+  {date:new Date(2026,6,5),  lang:'es',label:'ES · Marco A1 completo',desc:'Presente dominado · 200 palavras · conversa básica sobre rotina'},
+  {date:new Date(2026,7,31), lang:'en',label:'EN · Marco B1 funcional',desc:'Resumir artigo BBC em inglês · 200 palavras argumentativas · tradução PT→EN'},
+  {date:new Date(2026,7,31), lang:'fr',label:'FR · Marco A2 funcional',desc:'Passé composé e Imparfait dominados · texto simples sem dicionário'},
+  {date:new Date(2026,7,31), lang:'es',label:'ES · Marco A2 funcional',desc:'Pretérito dominado · conversa sobre passado · texto simples com fluência'},
+  {date:new Date(2026,9,31), lang:'en',label:'EN · Marco B2 em progresso',desc:'TED 15 min: 80%+ sem legenda · essay 250 palavras · EF SET B1 oficial'},
+  {date:new Date(2026,11,31),lang:'en',label:'EN · B2 alcançado ✦',desc:'Teste EF SET B2 · conversa 5 min RI · email acadêmico formal sem ajuda'},
+  {date:new Date(2026,11,31),lang:'fr',label:'FR · B1 alcançado ✦',desc:'Exercício DELF B1 ou equivalente · texto autêntico com 80% de compreensão'},
+  {date:new Date(2026,11,31),lang:'es',label:'ES · B1 alcançado ✦',desc:'Exercício DELE B1 · conversa 5 min · leitura autêntica com fluência'},
+];
+
+// ═══════════════════════════════
+// HELPERS
+// ═══════════════════════════════
+const addD=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r};
+const dkey=d=>`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+const today=()=>new Date();
+const totalW=()=>Math.ceil(TOTAL/7);
+const wStart=w=>{const d=new Date(START);d.setDate(d.getDate()+w*7);return d};
+const wEnd=w=>addD(wStart(w),6);
+const wOf=d=>Math.max(0,Math.floor((d-START)/86400000/7));
+const wNum=i=>Math.floor(i/7)+1;
+const fmt=d=>`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+const isFut=d=>{const t=today();t.setHours(0,0,0,0);const dd=new Date(d);dd.setHours(0,0,0,0);return dd>t};
+const getBlk=(arr,week)=>arr.find(g=>g.w.includes(week))||arr[arr.length-1];
+const getVoc=(arr,week)=>arr[Math.min(Math.floor((week-1)/2.5)|0,arr.length-1)];
+
+function getEN(idx){
+  const week=wNum(idx), dow=addD(START,idx).getDay();
+  const gram=getBlk(EN_GRAM,week);
+  const phase=week<=6?0:week<=14?1:week<=22?2:3;
+  const vocIdx=Math.min(Math.floor((week-1)%10),EN_VOCAB.length-1);
+  const phaseIdx=Math.min(Math.floor(idx/55),EN_INPUT[0].length-1);
+  return {
+    phase:phase+1,
+    gramTopic:gram.top,
+    gramTask:gram.byDow[dow],
+    inputType:[0,2,4].includes(dow)?'Leitura':'Listening',
+    inputTask:(([0,2,4].includes(dow)?EN_INPUT[dow]:EN_INPUT[dow])||EN_INPUT[0])[Math.min(phaseIdx,9)],
+    outputType:[0,3,6].includes(dow)?'Speaking':'Writing',
+    outputTask:(EN_OUTPUT[dow]||EN_OUTPUT[0])[Math.min(phaseIdx,9)],
+    vocabTheme:EN_VOCAB[Math.min(idx/7|0,EN_VOCAB.length-1)],
+  };
+}
+
+function getFR(idx){
+  const week=wNum(idx), dow=addD(START,idx).getDay();
+  const gram=getBlk(FR_GRAM,week);
+  return {gram:gram.top, task:gram.byDow[dow], vocab:getVoc(FR_VOC,week)};
+}
+
+function getES(idx){
+  const week=wNum(idx), dow=addD(START,idx).getDay();
+  const gram=getBlk(ES_GRAM,week);
+  return {gram:gram.top, task:gram.byDow[dow], vocab:getVoc(ES_VOC,week)};
+}
+
+// ═══════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════
+const SKEY='langplan_v3';
+let S={tasks:{},reviews:{},milestones:{}};
+let selDay=new Date(today());
+let curW=wOf(today());
+let lang='en';
+
+function setSave(s){const d=document.getElementById('sdot');d.className='sdot'+(s==='ok'?' ':s==='saving'?' saving':' err')}
+
+async function save(){
+  setSave('saving');
+  const j=JSON.stringify(S);
+  localStorage.setItem(SKEY,j);
+  try{if(window.storage)await window.storage.set(SKEY,j)}catch(e){}
+  setSave('ok');
+}
+async function load(){
+  try{if(window.storage){const r=await window.storage.get(SKEY);if(r&&r.value){S=JSON.parse(r.value);return}}}catch(e){}
+  const ls=localStorage.getItem(SKEY);
+  if(ls)try{S=JSON.parse(ls);return}catch(e){}
+  S={tasks:{},reviews:{},milestones:{}};
+}
+
+// ═══════════════════════════════
+// COMPUTED
+// ═══════════════════════════════
+const EN_IDS=['anki','input','gram','output','vocab'];
+function isDone(d,l){
+  const k=dkey(d);if(!S.tasks[k])return false;
+  if(l==='en')return EN_IDS.every(id=>S.tasks[k]['en_'+id]);
+  return !!S.tasks[k][l+'_s'];
+}
+function isPartial(d){const k=dkey(d);return S.tasks[k]&&Object.values(S.tasks[k]).some(Boolean)}
+function isAllDone(d){return isDone(d,'en')&&isDone(d,'fr')&&isDone(d,'es')}
+function countDone(l){let c=0;for(let k in S.tasks){const dd=parseKey(k);if(isDone(dd,l))c++;}return c}
+function parseKey(k){const[y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)}
+function streak(){
+  let s=0,d=new Date(today());
+  while(d>=START){if(!isAllDone(d)){if(dkey(d)===dkey(today())&&isPartial(d)){d.setDate(d.getDate()-1);continue}break}s++;d.setDate(d.getDate()-1)}
+  return s;
+}
+function pct(l){return Math.min(100,Math.round(countDone(l)/TOTAL*100))}
+function countRevs(){let c=0;for(let k in S.reviews)if(S.reviews[k])c++;return c}
+
+// ═══════════════════════════════
+// RENDER HELPERS
+// ═══════════════════════════════
+function h(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// ═══════════════════════════════
+// RENDER
+// ═══════════════════════════════
+function renderNav(){
+  const t=today();
+  document.getElementById('nav-date').textContent=DPT[t.getDay()]+', '+t.getDate()+' '+MPT[t.getMonth()]+' 2026';
+}
+
+function renderOverview(){
+  const ls=[{id:'en',label:'English',from:'A1/A2',to:'B2'},{id:'fr',label:'Français',from:'zero',to:'B1'},{id:'es',label:'Español',from:'zero',to:'B1'}];
+  document.getElementById('overview').innerHTML=ls.map(l=>`<div class="ovc" data-l="${l.id}"><div class="ov-lang">${l.label}</div><div class="ov-pct">${pct(l.id)}%</div><div class="ov-track"><div class="ov-fill" style="width:${pct(l.id)}%"></div></div><div class="ov-sub">${l.from} → ${l.to} · ${countDone(l.id)} dias</div></div>`).join('');
+}
+
+function renderStats(){
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-n">${streak()}</div><div class="stat-l">dias seguidos</div></div>
+    <div class="stat"><div class="stat-n">${countDone('en')}</div><div class="stat-l">dias EN</div></div>
+    <div class="stat"><div class="stat-n">${countDone('fr')}</div><div class="stat-l">dias FR</div></div>
+    <div class="stat"><div class="stat-n">${countDone('es')}</div><div class="stat-l">dias ES</div></div>`;
+}
+
+function renderWeek(){
+  const ws=wStart(curW),we=wEnd(curW);
+  document.getElementById('wt').textContent=`Semana ${curW+1} de ${totalW()}`;
+  document.getElementById('wr').textContent=`${fmt(ws)} – ${fmt(we)}`;
+  document.getElementById('pw').disabled=curW===0;
+  document.getElementById('nw').disabled=curW>=totalW()-1;
+}
+
+function renderGrid(){
+  const g=document.getElementById('dgrid');g.innerHTML='';
+  const ws=wStart(curW);
+  for(let i=0;i<7;i++){
+    const d=addD(ws,i);
+    if(d<START||d>new Date(2026,11,31))continue;
+    const fe=isDone(d,'en'),ff=isDone(d,'fr'),fs=isDone(d,'es');
+    const all=fe&&ff&&fs,part=isPartial(d)&&!all;
+    const fut=isFut(d),sel=dkey(d)===dkey(selDay);
+    let cls='dbtn';
+    if(all)cls+=' fall';
+    else if(fe&&lang==='en')cls+=' fen';
+    else if(ff&&lang==='fr')cls+=' ffr';
+    else if(fs&&lang==='es')cls+=' fes';
+    else if(part)cls+=' part';
+    if(fut)cls+=' future';if(sel)cls+=' sel';
+    const dots=['en','fr','es'].map(l=>{
+      const c=isDone(d,l)?(l==='en'?'var(--en)':l==='fr'?'var(--fr)':'var(--es)'):'#e0d8d0';
+      return `<div class="d-dot" style="background:${c}"></div>`;
+    }).join('');
+    const btn=document.createElement('div');
+    btn.className=cls;
+    btn.dataset.ts=d.getTime();
+    btn.innerHTML=`<div class="d-name">${DPT[d.getDay()]}</div><div class="d-num">${d.getDate()}</div><div class="d-dots">${dots}</div>`;
+    g.appendChild(btn);
+  }
+}
+
+function renderDayHdr(){
+  const isT=dkey(selDay)===dkey(today());
+  const fut=isFut(selDay);
+  document.getElementById('dtitle').textContent=isT?'Hoje — '+fmt(today()):(fut?'Planejado: ':'')+DPT[selDay.getDay()]+', '+fmt(selDay);
+  const idx=Math.max(0,Math.round((selDay-START)/86400000));
+  const en=getEN(idx);
+  document.getElementById('dmeta').textContent=`Semana ${wNum(idx)} · EN Fase ${en.phase} · 2h de estudo total`;
+  document.getElementById('done-banner').style.display=isAllDone(selDay)?'block':'none';
+}
+
+function renderContent(){
+  const idx=Math.max(0,Math.round((selDay-START)/86400000));
+  const k=dkey(selDay);
+  if(!S.tasks[k])S.tasks[k]={};
+  const fut=isFut(selDay);
+  const en=getEN(idx),fr=getFR(idx),es=getES(idx);
+  const showAll=lang==='all';
+  let html='';
+
+  if(showAll||lang==='en'){
+    const enTasks=[
+      {id:'anki',  lbl:'Anki — Revisão', time:'10 min', tag:'t-anki', tagL:'Anki',
+       detail:'Revisar todos os flashcards do dia. Vocabulário + gramática + frases. Nunca pule.',
+       specific:'Abra o Anki → revise todas as cartas pendentes dos 3 decks. Se ainda não tem deck: crie um e adicione as palavras de hoje.'},
+      {id:'input', lbl:en.inputType, time:'15 min', tag:'t-in', tagL:en.inputType,
+       detail:h(en.inputTask), specific:''},
+      {id:'gram',  lbl:'Gramática', time:'15 min', tag:'t-gram', tagL:'Gramática',
+       detail:`Tópico: ${h(en.gramTopic)}`,
+       specific:h(en.gramTask)},
+      {id:'output',lbl:en.outputType, time:'15 min', tag:'t-out', tagL:en.outputType,
+       detail:h(en.outputTask), specific:''},
+      {id:'vocab', lbl:'Vocabulário → Anki', time:'5 min', tag:'t-voc', tagL:'Vocab',
+       detail:`Tema de hoje: ${h(en.vocabTheme)}`,
+       specific:'Aprenda 5 palavras novas sempre em frases completas. Depois abra o Anki e adicione as 5. Nunca palavras soltas.'},
+    ];
+    html+=`<div class="sec"><span>🇺🇸</span> English <span class="sbadge sb-en">1 hora · Fase ${en.phase}</span></div><div class="tasks" data-lang="en">`;
+    enTasks.forEach(t=>{
+      const done=!!S.tasks[k]['en_'+t.id];
+      html+=`<div class="task${done?' done':''}${fut?' fut':''}" data-tid="en_${t.id}">
+        <div class="chk">${done?'✓':''}</div>
+        <div class="tb">
+          <div class="t-head"><span class="tag ${t.tag}">${t.tagL}</span><span class="t-label">${t.lbl}</span><span class="t-time">${t.time}</span></div>
+          <div class="t-detail">${t.detail}</div>
+          ${t.specific?`<div class="t-specific">→ ${t.specific}</div>`:''}
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+
+  if(showAll||lang==='fr'){
+    const frDone=!!S.tasks[k]['fr_s'];
+    html+=`<div class="sec"><span>🇫🇷</span> Français <span class="sbadge sb-fr">30 min</span></div>
+    <div class="lsession${frDone?' done':''}${fut?' fut':''}" data-tid="fr_s">
+      <div class="ls-hdr"><span class="tag t-fr">FR</span><span class="ls-title">Sessão do dia</span><span class="ls-gram">Gram: ${h(fr.gram)} · Vocab: ${h(fr.vocab)}</span></div>
+      <div class="ls-blocks">
+        <div class="ls-block"><strong>Anki (5 min)</strong>Revisar todas as cartas FR pendentes.</div>
+        <div class="ls-block"><strong>Gramática + Output (20 min)</strong>${h(fr.task)}</div>
+        <div class="ls-block"><strong>Vocab (5 min)</strong>Tema: ${h(fr.vocab)} — aprenda 5 palavras novas em frases → adicione ao Anki FR.</div>
+      </div>
+      <div class="ls-foot">
+        <div class="chk">${frDone?'✓':''}</div>
+        <span>${frDone?'Sessão concluída — ótimo trabalho!':'Marcar sessão como concluída'}</span>
+      </div>
+    </div>`;
+  }
+
+  if(showAll||lang==='es'){
+    const esDone=!!S.tasks[k]['es_s'];
+    html+=`<div class="sec"><span>🇪🇸</span> Español <span class="sbadge sb-es">30 min</span></div>
+    <div class="lsession${esDone?' done':''}${fut?' fut':''}" data-tid="es_s">
+      <div class="ls-hdr"><span class="tag t-es">ES</span><span class="ls-title">Sesión del día</span><span class="ls-gram">Gram: ${h(es.gram)} · Vocab: ${h(es.vocab)}</span></div>
+      <div class="ls-blocks">
+        <div class="ls-block"><strong>Anki (5 min)</strong>Revisar todas as cartas ES pendentes.</div>
+        <div class="ls-block"><strong>Gramática + Output (20 min)</strong>${h(es.task)}</div>
+        <div class="ls-block"><strong>Vocab (5 min)</strong>Tema: ${h(es.vocab)} — aprenda 5 palabras nuevas en frases → adicione ao Anki ES.</div>
+      </div>
+      <div class="ls-foot">
+        <div class="chk">${esDone?'✓':''}</div>
+        <span>${esDone?'Sesión completada — ¡excelente!':'Marcar sesión como completada'}</span>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('content').innerHTML=html;
+}
+
+function renderReviews(){
+  let pend=0;
+  document.getElementById('ritems').innerHTML=REVIEWS.map(r=>{
+    const rk=r.id+'_w'+curW;const done=!!S.reviews[rk];
+    if(!done)pend++;
+    return `<div class="ritem${done?' dr':''}" data-rk="${h(rk)}"><div class="rdot ${done?'rdd':'rdp'}"></div><div class="rt"><div class="rn">${r.name}</div><div class="rw">${r.when}</div></div><button class="rbtn">${done?'Desfazer':'Feita ✓'}</button></div>`;
+  }).join('');
+  document.getElementById('rcnt').textContent=`${pend} pendente${pend===1?'':'s'}`;
+}
+
+function renderMs(){
+  const t=today();
+  document.getElementById('mslist').innerHTML=MILESTONES.map((m,i)=>{
+    const done=!!S.milestones['ms'+i];
+    const cur=!done&&t<=m.date&&(i===0||t>MILESTONES[i-1].date);
+    const lk=!done&&!cur;
+    const lc={en:'var(--en)',fr:'var(--fr)',es:'var(--es)'};
+    const dot=`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${lc[m.lang]};margin-right:4px;vertical-align:middle"></span>`;
+    return `<div class="msi${done?' done':cur?' cur':' lk'}" data-mi="${i}"><div class="ms-ico">${done?'✅':cur?'🎯':'🔒'}</div><div class="ms-body"><div class="ms-name">${dot}${m.label}</div><div class="ms-desc">${m.desc}</div><div class="ms-date">${fmt(m.date)}</div></div><div class="ms-badge ${done?'mb-d':cur?'mb-c':'mb-l'}">${done?'alcançado':cur?'em progresso':'próximo'}</div></div>`;
+  }).join('');
+}
+
+function renderAll(){
+  renderNav();renderOverview();renderStats();renderWeek();renderGrid();renderDayHdr();renderContent();renderReviews();renderMs();
+  document.querySelectorAll('.ltab').forEach(t=>t.classList.toggle('active',t.dataset.l===lang));
+}
+
+// ═══════════════════════════════
+// EVENTS — event delegation, sem onclick inline
+// ═══════════════════════════════
+document.getElementById('lang-tabs').addEventListener('click',e=>{
+  const t=e.target.closest('.ltab');if(!t)return;
+  lang=t.dataset.l;renderAll();
+});
+
+document.getElementById('dgrid').addEventListener('click',e=>{
+  const b=e.target.closest('.dbtn');if(!b)return;
+  selDay=new Date(Number(b.dataset.ts));renderAll();
+});
+
+document.getElementById('pw').addEventListener('click',()=>{if(curW>0){curW--;selDay=wStart(curW);renderAll()}});
+document.getElementById('nw').addEventListener('click',()=>{if(curW<totalW()-1){curW++;selDay=wStart(curW);renderAll()}});
+
+document.getElementById('content').addEventListener('click',e=>{
+  // EN tasks
+  const task=e.target.closest('.task:not(.fut)');
+  if(task&&task.dataset.tid){
+    const k=dkey(selDay);if(!S.tasks[k])S.tasks[k]={};
+    S.tasks[k][task.dataset.tid]=!S.tasks[k][task.dataset.tid];
+    save();renderAll();return;
+  }
+  // FR/ES sessions
+  const sess=e.target.closest('.lsession:not(.fut)');
+  if(sess&&sess.dataset.tid){
+    const k=dkey(selDay);if(!S.tasks[k])S.tasks[k]={};
+    S.tasks[k][sess.dataset.tid]=!S.tasks[k][sess.dataset.tid];
+    save();renderAll();
+  }
+});
+
+document.getElementById('ritems').addEventListener('click',e=>{
+  const item=e.target.closest('.ritem');if(!item)return;
+  const rk=item.dataset.rk;if(!rk)return;
+  S.reviews[rk]=!S.reviews[rk];save();renderAll();
+});
+
+document.getElementById('mslist').addEventListener('click',e=>{
+  const m=e.target.closest('.msi:not(.lk)');if(!m)return;
+  const i=Number(m.dataset.mi);
+  S.milestones['ms'+i]=!S.milestones['ms'+i];save();renderAll();
+});
+
+document.getElementById('reset-btn').addEventListener('click',()=>{
+  if(confirm('Apagar TODO o progresso? Isso não pode ser desfeito.'))
+  {S={tasks:{},reviews:{},milestones:{}};save();renderAll();}
+});
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+(async()=>{
+  await load();
+  if(!S.tasks)S.tasks={};if(!S.reviews)S.reviews={};if(!S.milestones)S.milestones={};
+  selDay=new Date(today());curW=wOf(today());
+  renderAll();setSave('ok');
+})();
+</script>
+</body>
+</html>
