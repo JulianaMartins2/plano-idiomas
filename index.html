@@ -58,7 +58,8 @@ nav{background:var(--ink);color:#fff;padding:0 16px;display:flex;align-items:cen
 .dbtn.fen{background:var(--en-bg);border-color:var(--en-bd)}
 .dbtn.ffr{background:var(--fr-bg);border-color:var(--fr-bd)}
 .dbtn.fes{background:var(--es-bg);border-color:var(--es-bd)}
-.dbtn.part{background:var(--amber-bg);border-color:var(--amber-bd)}
+.dbtn.sun-off{background:#f5f5f5;border-color:#e0e0e0;cursor:default;opacity:.6}
+.dbtn.sun-off:hover{border-color:#e0e0e0}
 .d-name{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
 .d-num{font-size:13px;font-weight:600}
 .d-dots{display:flex;justify-content:center;gap:2px;margin-top:3px}
@@ -736,6 +737,23 @@ const wOf=d=>Math.max(0,Math.floor((d-START)/86400000/7));
 const wNum=i=>Math.floor(i/7)+1;
 const fmt=d=>`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
 const isFut=d=>{const t=today();t.setHours(0,0,0,0);const dd=new Date(d);dd.setHours(0,0,0,0);return dd>t};
+const isDom=d=>d.getDay()===0; // domingo = folga
+
+// Encontra o último dia de estudo não concluído (seg-sab, a partir do START, até hoje)
+function findLastIncomplete(){
+  const t=today();t.setHours(0,0,0,0);
+  // Varre do dia anterior até o START buscando o último incompleto
+  let lastIncomplete=null;
+  for(let i=0;i<TOTAL;i++){
+    const d=addD(START,i);
+    d.setHours(0,0,0,0);
+    if(d>t) break; // só olha até hoje
+    if(isDom(d)) continue; // pula domingo
+    if(!isAllDone(d)) lastIncomplete=new Date(d);
+  }
+  // Se não tem dia incompleto, abre em hoje
+  return lastIncomplete||new Date(t);
+}
 const getBlk=(arr,week)=>arr.find(g=>g.w.includes(week))||arr[arr.length-1];
 const getVoc=(arr,week)=>arr[Math.min(Math.floor((week-1)/2.5)|0,arr.length-1)];
 
@@ -855,23 +873,26 @@ function renderGrid(){
   for(let i=0;i<7;i++){
     const d=addD(ws,i);
     if(d<START||d>new Date(2026,11,31))continue;
+    const isSun=isDom(d);
     const fe=isDone(d,'en'),ff=isDone(d,'fr'),fs=isDone(d,'es');
     const all=fe&&ff&&fs,part=isPartial(d)&&!all;
     const fut=isFut(d),sel=dkey(d)===dkey(selDay);
     let cls='dbtn';
-    if(all)cls+=' fall';
+    if(isSun) cls+=' sun-off';
+    else if(all)cls+=' fall';
     else if(fe&&lang==='en')cls+=' fen';
     else if(ff&&lang==='fr')cls+=' ffr';
     else if(fs&&lang==='es')cls+=' fes';
     else if(part)cls+=' part';
-    if(fut)cls+=' future';if(sel)cls+=' sel';
-    const dots=['en','fr','es'].map(l=>{
+    if(fut)cls+=' future';if(sel&&!isSun)cls+=' sel';
+    const dots=isSun?'<div style="font-size:9px;color:var(--muted);margin-top:3px">folga</div>':['en','fr','es'].map(l=>{
       const c=isDone(d,l)?(l==='en'?'var(--en)':l==='fr'?'var(--fr)':'var(--es)'):'#e0d8d0';
       return `<div class="d-dot" style="background:${c}"></div>`;
     }).join('');
     const btn=document.createElement('div');
     btn.className=cls;
     btn.dataset.ts=d.getTime();
+    btn.dataset.sun=isSun?'1':'0';
     btn.innerHTML=`<div class="d-name">${DPT[d.getDay()]}</div><div class="d-num">${d.getDate()}</div><div class="d-dots">${dots}</div>`;
     g.appendChild(btn);
   }
@@ -1001,6 +1022,7 @@ document.getElementById('lang-tabs').addEventListener('click',e=>{
 
 document.getElementById('dgrid').addEventListener('click',e=>{
   const b=e.target.closest('.dbtn');if(!b)return;
+  if(b.dataset.sun==='1')return; // domingo = folga, não clicável
   selDay=new Date(Number(b.dataset.ts));renderAll();
 });
 
@@ -1047,7 +1069,8 @@ document.getElementById('reset-btn').addEventListener('click',()=>{
 (async()=>{
   await load();
   if(!S.tasks)S.tasks={};if(!S.reviews)S.reviews={};if(!S.milestones)S.milestones={};
-  selDay=new Date(today());curW=wOf(today());
+  selDay=findLastIncomplete();
+  curW=wOf(selDay);
   renderAll();setSave('ok');
 })();
 </script>
