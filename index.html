@@ -592,14 +592,15 @@ const wNum=i=>Math.floor(i/7)+1;
 const getBlk=(arr,week)=>arr.find(g=>g.w.includes(week))||arr[arr.length-1];
 const getVoc=(arr,week)=>arr[Math.min(Math.floor((week-1)/2.5)|0,arr.length-1)];
 
-function findLastIncomplete(){
+function findLastIncomplete(l){
   const t=today();t.setHours(0,0,0,0);
   let last=null;
   for(let i=0;i<300;i++){
     const d=addD(START,i);d.setHours(0,0,0,0);
     if(d>t) break;
     if(isDom(d)) continue;
-    if(!isAllDone(d)) last=new Date(d);
+    const langs=l&&l!=='all'?[l]:['en','fr','es'];
+    if(langs.some(ll=>!isDone(d,ll))) last=new Date(d);
   }
   return last||new Date(t);
 }
@@ -731,28 +732,35 @@ function renderWeek(){
 function renderGrid(){
   const g=document.getElementById('dgrid');g.innerHTML='';
   const ws=wStart(curW);
+  const t=today();t.setHours(0,0,0,0);
   for(let i=0;i<7;i++){
     const d=addD(ws,i);
     if(d<START||d>END) continue;
     const sun=isDom(d);
-    const fe=isDone(d,'en'),ff=isDone(d,'fr'),fs=isDone(d,'es');
-    const all=fe&&ff&&fs,part=isPartial(d)&&!all;
-    const fut=isFut(d),sel=dkey(d)===dkey(selDay);
-    const t=today();t.setHours(0,0,0,0);
     const dd2=new Date(d);dd2.setHours(0,0,0,0);
-    const missed=!sun&&!fut&&!all&&dd2<t;
+    const fut=isFut(d);
+    const sel=dkey(d)===dkey(selDay);
     const dn=sun?null:dayNum(d);
+    // Cor baseada no idioma ativo
+    const activeLangs=lang==='all'?['en','fr','es']:[lang];
+    const allActive=activeLangs.every(l=>isDone(d,l));
+    const anyActive=activeLangs.some(l=>isDone(d,l));
+    const missedActive=!sun&&!fut&&!allActive&&dd2<t&&anyActive===false;
+    const partMissed=!sun&&!fut&&!allActive&&dd2<t&&anyActive;
     let cls='dbtn';
-    if(sun)cls+=' sun-off';
-    else if(all)cls+=' fall';
-    else if(missed)cls+=' missed';
-    else if(part)cls+=' part';
-    else if(fe&&lang==='en')cls+=' fen';
-    else if(ff&&lang==='fr')cls+=' ffr';
-    else if(fs&&lang==='es')cls+=' fes';
-    if(fut&&!sun)cls+=' future';
-    if(sel&&!sun)cls+=' sel';
-    const dots=sun?`<div style="font-size:9px;color:var(--muted);margin-top:3px">folga</div>`:['en','fr','es'].map(l=>{const c=isDone(d,l)?(l==='en'?'var(--en)':l==='fr'?'var(--fr)':'var(--es)'):'#e0d8d0';return `<div class="d-dot" style="background:${c}"></div>`;}).join('');
+    if(sun) cls+=' sun-off';
+    else if(allActive) cls+=' fall';
+    else if(missedActive) cls+=' missed';
+    else if(partMissed) cls+=' part';
+    else if(fut) cls+=' future';
+    if(sel&&!sun) cls+=' sel';
+    // Dots independentes sempre
+    const dots=sun
+      ?`<div style="font-size:9px;color:var(--muted);margin-top:3px">folga</div>`
+      :['en','fr','es'].map(l=>{
+          const c=isDone(d,l)?(l==='en'?'var(--en)':l==='fr'?'var(--fr)':'var(--es)'):'#e0d8d0';
+          return `<div class="d-dot" style="background:${c}"></div>`;
+        }).join('');
     const btn=document.createElement('div');
     btn.className=cls;
     btn.dataset.ts=d.getTime();
@@ -768,15 +776,21 @@ function renderDayHdr(){
   const t=today();t.setHours(0,0,0,0);
   const sd=new Date(selDay);sd.setHours(0,0,0,0);
   const isToday=dkey(selDay)===dkey(today());
-  const missed=!fut&&!isAllDone(selDay)&&sd<t;
-  document.getElementById('dtitle').textContent=isToday?`Hoje · Dia ${dn}`:(fut?`Planejado · Dia ${dn}`:`Dia ${dn}`)+ ` — ${DPT[selDay.getDay()]} ${fmt(selDay)}`;
+  document.getElementById('dtitle').textContent=isToday?`Hoje · Dia ${dn}`:(fut?`Planejado · Dia ${dn}`:`Dia ${dn}`)+` — ${DPT[selDay.getDay()]} ${fmt(selDay)}`;
   const en=getEN(selDay);
   const sw=studyWeekNum(selDay);
   document.getElementById('dmeta').textContent=`Semana ${sw} · EN Fase ${en.phase} · 2h de estudo`;
-  document.getElementById('done-banner').style.display=isAllDone(selDay)?'block':'none';
+  // Banner: só mostra completo para o idioma ativo
+  const activeLangs=lang==='all'?['en','fr','es']:[lang];
+  const allDone=activeLangs.every(l=>isDone(selDay,l));
+  document.getElementById('done-banner').style.display=allDone?'block':'none';
   const mb=document.getElementById('missed-banner');
-  if(missed&&!isAllDone(selDay)&&!fut){mb.style.display='block';mb.textContent=`⚠️ Este dia está incompleto. Complete as tarefas para recuperar o Dia ${dn}.`;}
-  else mb.style.display='none';
+  const missed=!fut&&!allDone&&sd<t;
+  if(missed){
+    const langName=lang==='en'?'Inglês':lang==='fr'?'Francês':lang==='es'?'Espanhol':'algum idioma';
+    mb.style.display='block';
+    mb.textContent=`⚠️ ${langName} incompleto neste dia. Complete para recuperar o Dia ${dn}.`;
+  } else mb.style.display='none';
 }
 
 function renderContent(){
@@ -873,7 +887,10 @@ function renderAll(){
 // ═══════════════════════════════
 document.getElementById('lang-tabs').addEventListener('click',e=>{
   const t=e.target.closest('.ltab');if(!t)return;
-  lang=t.dataset.l;renderAll();
+  lang=t.dataset.l;
+  selDay=findLastIncomplete(lang);
+  curW=wOf(selDay);
+  renderAll();
 });
 document.getElementById('dgrid').addEventListener('click',e=>{
   const b=e.target.closest('.dbtn');if(!b||b.dataset.sun==='1')return;
@@ -916,7 +933,7 @@ document.getElementById('reset-btn').addEventListener('click',()=>{
 (async()=>{
   await load();
   if(!S.tasks)S.tasks={};if(!S.reviews)S.reviews={};if(!S.milestones)S.milestones={};
-  selDay=findLastIncomplete();
+  selDay=findLastIncomplete(lang);
   curW=wOf(selDay);
   renderAll();setSave('ok');
 })();
